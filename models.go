@@ -70,3 +70,53 @@ func databaseFeedFollowToFeedFollow(dbFeedFollow db.FeedFollow) FeedFollow {
 		FeedID:    dbFeedFollow.UserID,
 	}
 }
+
+func databaseFeedFollowsToFeedFollows(dbFeedFollows []db.FeedFollow) []FeedFollow {
+	feedFollows := []FeedFollow{}
+	for _, dbFeedFollow := range dbFeedFollows {
+		feedFollows = append(feedFollows, databaseFeedFollowToFeedFollow(dbFeedFollow))
+	}
+	return feedFollows
+}
+
+type Post struct {
+	ID          uuid.UUID  `json:"id"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	Title       string     `json:"title"`
+	Description *string    `json:"description"`
+	PublishedAt *time.Time `json:"published_at"`
+	Url         string     `json:"url"`
+	FeedID      uuid.UUID  `json:"feed_id"`
+}
+
+func databasePostToPost(dbPost db.Post) Post {
+	var description *string
+	if dbPost.Description.Valid {
+		description = &dbPost.Description.String
+	}
+
+	var published_at *time.Time
+	if dbPost.PublishedAt.Valid {
+		published_at = &dbPost.PublishedAt.Time
+	}
+	return Post{
+		ID:          dbPost.ID,
+		CreatedAt:   dbPost.CreatedAt,
+		UpdatedAt:   dbPost.UpdatedAt,
+		Title:       dbPost.Title,
+		Description: description,
+		PublishedAt: published_at,
+		Url:         dbPost.Url,
+		FeedID:      dbPost.FeedID,
+	}
+}
+
+func databasePostsToPosts(dbPosts []db.Post) []Post {
+	userPosts := []Post{}
+	for _, post := range dbPosts {
+		// println(post)
+		userPosts = append(userPosts, databasePostToPost(post))
+	}
+	return userPosts
+}

@@ -5,18 +5,20 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 type Feed struct {
-	ID        uuid.UUID `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Name      string    `json:"name"`
-	Url       string    `json:"url"`
-	UserID    uuid.UUID `json:"user_id"`
+	ID            uuid.UUID    `json:"id"`
+	CreatedAt     time.Time    `json:"created_at"`
+	UpdatedAt     time.Time    `json:"updated_at"`
+	Name          string       `json:"name"`
+	Url           string       `json:"url"`
+	UserID        uuid.UUID    `json:"user_id"`
+	LastFetchesAt sql.NullTime `json:"last_fetches_at"`
 }
 
 type FeedFollow struct {
@@ -25,6 +27,17 @@ type FeedFollow struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	UserID    uuid.UUID `json:"user_id"`
 	FeedID    uuid.UUID `json:"feed_id"`
+}
+
+type Post struct {
+	ID          uuid.UUID      `json:"id"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	Title       string         `json:"title"`
+	Description sql.NullString `json:"description"`
+	PublishedAt sql.NullTime   `json:"published_at"`
+	Url         string         `json:"url"`
+	FeedID      uuid.UUID      `json:"feed_id"`
 }
 
 type User struct {
